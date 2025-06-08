@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background: #1a1a1a;
+            border-radius: 55px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            border: 12px solid #1a1a1a;
+        }
+        .iphone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 10;
+        }
+        .iphone-frame::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60px;
+            background: #2a2a2a;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        .side-button {
+            position: absolute;
+            right: -12px;
+            width: 3px;
+            background: #2a2a2a;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        .side-button.volume-up {
+            top: 30%;
+            height: 40px;
+        }
+        .side-button.volume-down {
+            top: 40%;
+            height: 40px;
+        }
+        .side-button.power {
+            top: 20%;
+            height: 60px;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .price-tag {
+            background: linear-gradient(135deg, #FF9900, #FFB84D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="iphone-frame">
+        <div class="side-button volume-up"></div>
+        <div class="side-button volume-down"></div>
+        <div class="side-button power"></div>
+        <div class="p-4 pt-8 text-white">
+            <!-- Sales Volume -->
+            <div class="chart-container mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-1">Sales Volume</h3>
+                        <p class="text-xs text-gray-500">Daily sales volume over the past month</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-full">Month</button>
+                        <button class="px-3 py-1 text-xs bg-gray-700 text-gray-400 rounded-full">Year</button>
+                    </div>
+                </div>
+                <canvas id="salesVolumeChart" height="100"></canvas>
+            </div>
+
+            <!-- Average Sale Price and Shipping -->
+            <div class="chart-container mb-4">
+                <h3 class="text-sm font-medium text-gray-400 mb-1">Price Analysis</h3>
+                <p class="text-xs text-gray-500 mb-2">Average sale price and shipping costs</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-800/30 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Avg. Sale Price</p>
+                        <p class="text-xl font-bold price-tag">$49.99</p>
+                        <p class="text-xs text-green-400">+5% from last month</p>
+                    </div>
+                    <div class="bg-gray-800/30 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Avg. Shipping</p>
+                        <p class="text-xl font-bold text-blue-400">$4.99</p>
+                        <p class="text-xs text-gray-400">Prime eligible</p>
+                    </div>
+                </div>
+                <div class="mt-4 h-2 bg-gray-800/50 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full" style="width: 85%"></div>
+                </div>
+                <p class="text-xs text-gray-400 mt-2">Price competitiveness score: 85%</p>
+            </div>
+
+            <!-- Review Volume vs Sales Rank -->
+            <div class="chart-container">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-1">Reviews vs Sales Rank</h3>
+                        <p class="text-xs text-gray-500">Sales rank vs review volume: A good rank with low reviews suggests strong sales but potential quality issues. High reviews with poor rank may indicate customer satisfaction issues.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-full">Month</button>
+                        <button class="px-3 py-1 text-xs bg-gray-700 text-gray-400 rounded-full">Year</button>
+                    </div>
+                </div>
+                <canvas id="reviewSalesChart" height="100"></canvas>
+                <div class="flex items-center justify-between text-sm mt-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-gray-400">Sales Rank</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <span class="text-gray-400">Reviews</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sales Volume Chart
+        new Chart(document.getElementById('salesVolumeChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [45, 52, 38, 65],
+                    borderColor: '#FF9900',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Review Volume vs Sales Rank Chart
+        new Chart(document.getElementById('reviewSalesChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Sales Rank',
+                    data: [2500, 1800, 1200, 800],
+                    borderColor: '#00ff88',
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'Reviews',
+                    data: [120, 145, 168, 195],
+                    borderColor: '#3366ff',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

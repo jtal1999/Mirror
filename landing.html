@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: backgroundReveal 5s ease-in-out forwards;
+            animation-delay: 0.5s;
+            mask-image: linear-gradient(to right, 
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 10%,
+                rgba(255, 255, 255, 0.2) 20%,
+                rgba(255, 255, 255, 0.3) 30%,
+                rgba(255, 255, 255, 0.4) 40%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.6) 60%,
+                rgba(255, 255, 255, 0.7) 70%,
+                rgba(255, 255, 255, 0.8) 80%,
+                rgba(255, 255, 255, 0.9) 90%,
+                white 100%
+            );
+            -webkit-mask-image: linear-gradient(to right, 
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 10%,
+                rgba(255, 255, 255, 0.2) 20%,
+                rgba(255, 255, 255, 0.3) 30%,
+                rgba(255, 255, 255, 0.4) 40%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.6) 60%,
+                rgba(255, 255, 255, 0.7) 70%,
+                rgba(255, 255, 255, 0.8) 80%,
+                rgba(255, 255, 255, 0.9) 90%,
+                white 100%
+            );
+        }
+
+        @keyframes backgroundReveal {
+            0% {
+                opacity: 0;
+                transform: translateX(-5%);
+                filter: brightness(0.8) contrast(1.2);
+            }
+            20% {
+                opacity: 0.2;
+                transform: translateX(-4%);
+                filter: brightness(0.85) contrast(1.15);
+            }
+            40% {
+                opacity: 0.4;
+                transform: translateX(-3%);
+                filter: brightness(0.9) contrast(1.1);
+            }
+            60% {
+                opacity: 0.6;
+                transform: translateX(-2%);
+                filter: brightness(0.95) contrast(1.05);
+            }
+            80% {
+                opacity: 0.8;
+                transform: translateX(-1%);
+                filter: brightness(0.98) contrast(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+                filter: brightness(1) contrast(1);
+            }
+        }
+
+        /* Add a subtle overlay to ensure text readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        .logo-container, .container, .contact-info {
+            position: relative;
+            z-index: 3;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 2rem;
+            left: 2.5rem;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: -0.8rem;
+        }
+
+        .logo {
+            width: 160px;
+            height: auto;
+            opacity: 0;
+            filter: brightness(1.4) contrast(1.3) opacity(0.85);
+            transition: all 0.3s ease;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .company-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.2s;
+            margin-left: 3rem;
+            margin-top: 1rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .company-name span {
+            display: block;
+            line-height: 1.4;
+            font-feature-settings: "kern" 1;
+            -webkit-font-smoothing: antialiased;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+            filter: brightness(1.2);
+            font-weight: 300;
+        }
+
+        .subtext {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.1rem;
+            margin-left: 3rem;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo:hover {
+            filter: brightness(1.6) contrast(1.4) opacity(1);
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .quote {
+            font-size: 2.4rem;
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            letter-spacing: 0.02em;
+            opacity: 0.92;
+            min-height: 4.8rem;
+        }
+
+        .quote span {
+            display: block;
+            margin-top: 1.2rem;
+            font-style: italic;
+            font-weight: 300;
+            letter-spacing: 0.03em;
+            min-height: 2.4rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Subtle ambient light effect */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.015) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .quote {
+                font-size: 1.8rem;
+                padding: 0 1rem;
+            }
+            .logo-container {
+                top: 1rem;
+                left: 1rem;
+            }
+            .logo {
+                width: 100px;
+            }
+            .company-name {
+                font-size: 0.8rem;
+                margin-left: 1.5rem;
+            }
+            .subtext {
+                font-size: 0.6rem;
+                margin-left: 1.7rem;
+            }
+        }
+
+        .contact-info {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: right;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .contact-info a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-info a:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .contact-info i {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-info a:hover i {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        @media (max-width: 768px) {
+            .contact-info {
+                font-size: 0.7rem;
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="background-image"></div>
+    </div>
+    <div class="logo-container">
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <div class="company-name">
+            <span>MIRROR</span>
+        </div>
+        <div class="subtext">Marketing</div>
+    </div>
+    <div class="ambient-light"></div>
+    <div class="container">
+        <div class="quote" id="quote"></div>
+    </div>
+    <div class="contact-info">
+        <a href="mailto:Jordan@mirror.marketing"><i class="fas fa-envelope"></i>Jordan@mirror.marketing</a>
+        <a href="tel:+1234567890"><i class="fas fa-phone"></i>(123) 456-7890</a>
+    </div>
+
+    <script>
+        const firstLine = "We design moments that capture attention,";
+        const secondLine = "and turn them into measurable action.";
+        const quoteElement = document.getElementById('quote');
+        let currentText = '';
+        let currentIndex = 0;
+        let isFirstLine = true;
+
+        function typeText() {
+            if (isFirstLine) {
+                if (currentIndex < firstLine.length) {
+                    currentText += firstLine[currentIndex];
+                    quoteElement.innerHTML = currentText + '<div class="cursor"></div>';
+                    currentIndex++;
+                    setTimeout(typeText, 80);
+                } else {
+                    currentText += '</div><span>';
+                    quoteElement.innerHTML = currentText + '<div class="cursor"></div>';
+                    isFirstLine = false;
+                    currentIndex = 0;
+                    setTimeout(typeText, 1500); // Pause for 1.5 seconds before second line
+                }
+            } else {
+                if (currentIndex < secondLine.length) {
+                    currentText += secondLine[currentIndex];
+                    quoteElement.innerHTML = currentText + '<div class="cursor"></div>';
+                    currentIndex++;
+                    setTimeout(typeText, 80);
+                } else {
+                    quoteElement.innerHTML = currentText;
+                }
+            }
+        }
+
+        // Start typing after a short delay
+        setTimeout(typeText, 500);
+    </script>
+</body>
+</html> 

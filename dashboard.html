@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiktok Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background: #1a1a1a;
+            border-radius: 55px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            border: 12px solid #1a1a1a;
+        }
+        .iphone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 10;
+        }
+        .iphone-frame::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60px;
+            background: #2a2a2a;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        .side-button {
+            position: absolute;
+            right: -12px;
+            width: 3px;
+            background: #2a2a2a;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        .side-button.volume-up {
+            top: 30%;
+            height: 40px;
+        }
+        .side-button.volume-down {
+            top: 40%;
+            height: 40px;
+        }
+        .side-button.power {
+            top: 20%;
+            height: 60px;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .circular-progress {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 8;
+        }
+        .circular-progress .bg {
+            stroke: rgba(255, 255, 255, 0.1);
+        }
+        .circular-progress .progress {
+            stroke: #00ff88;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="iphone-frame">
+        <div class="side-button volume-up"></div>
+        <div class="side-button volume-down"></div>
+        <div class="side-button power"></div>
+        <div class="p-4 pt-8 text-white">
+            <!-- Cumulative Score -->
+            <div class="chart-container flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-400 mb-1">Cumulative Score</h3>
+                    <p class="text-xs text-gray-500 mb-2">Aggregates all this data to give 1 consolidated trend score</p>
+                    <p class="text-2xl font-bold">87%</p>
+                </div>
+                <div class="circular-progress">
+                    <svg width="120" height="120">
+                        <circle class="bg" cx="60" cy="60" r="54" />
+                        <circle class="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="44.108" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Product Video Volume -->
+            <div class="chart-container mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-1">Product Video Volume</h3>
+                        <p class="text-xs text-gray-500">How many videos there are for a product within a month, or a year</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-full">Month</button>
+                        <button class="px-3 py-1 text-xs bg-gray-700 text-gray-400 rounded-full">Year</button>
+                    </div>
+                </div>
+                <canvas id="videoVolumeChart" height="100"></canvas>
+            </div>
+
+            <!-- Engagement Pattern -->
+            <div class="chart-container mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-1">Engagement Pattern</h3>
+                        <p class="text-xs text-gray-500">How many likes/shares a product has gotten over a month, or a year</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-full">Month</button>
+                        <button class="px-3 py-1 text-xs bg-gray-700 text-gray-400 rounded-full">Year</button>
+                    </div>
+                </div>
+                <canvas id="engagementChart" height="100"></canvas>
+            </div>
+
+            <!-- Reach -->
+            <div class="chart-container">
+                <h3 class="text-sm font-medium text-gray-400 mb-1">Total Product Reach</h3>
+                <p class="text-xs text-gray-500 mb-2">How many average followers the influencers have for the videos across one product, going back a month or a year</p>
+                <div class="space-y-4">
+                    <div class="relative h-8 bg-gray-800/50 rounded-full overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full" style="width: 75%"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-sm font-medium">2M total followers</span>
+                        </div>
+                        <div class="absolute inset-0 bg-gray-700/30 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Video Volume Chart
+        new Chart(document.getElementById('videoVolumeChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Videos',
+                    data: [8, 12, 15, 10],
+                    borderColor: '#00ff88',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Engagement Pattern Chart
+        new Chart(document.getElementById('engagementChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Engagement',
+                    data: [25000, 45000, 38000, 52000],
+                    borderColor: '#ff3366',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
