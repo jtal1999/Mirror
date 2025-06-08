@@ -49,66 +49,16 @@
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0;
-            animation: backgroundReveal 5s ease-in-out forwards;
+            animation: backgroundFadeIn 5s ease-in-out forwards;
             animation-delay: 0.5s;
-            mask-image: linear-gradient(to right, 
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 10%,
-                rgba(255, 255, 255, 0.2) 20%,
-                rgba(255, 255, 255, 0.3) 30%,
-                rgba(255, 255, 255, 0.4) 40%,
-                rgba(255, 255, 255, 0.5) 50%,
-                rgba(255, 255, 255, 0.6) 60%,
-                rgba(255, 255, 255, 0.7) 70%,
-                rgba(255, 255, 255, 0.8) 80%,
-                rgba(255, 255, 255, 0.9) 90%,
-                white 100%
-            );
-            -webkit-mask-image: linear-gradient(to right, 
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 10%,
-                rgba(255, 255, 255, 0.2) 20%,
-                rgba(255, 255, 255, 0.3) 30%,
-                rgba(255, 255, 255, 0.4) 40%,
-                rgba(255, 255, 255, 0.5) 50%,
-                rgba(255, 255, 255, 0.6) 60%,
-                rgba(255, 255, 255, 0.7) 70%,
-                rgba(255, 255, 255, 0.8) 80%,
-                rgba(255, 255, 255, 0.9) 90%,
-                white 100%
-            );
         }
 
-        @keyframes backgroundReveal {
-            0% {
+        @keyframes backgroundFadeIn {
+            from {
                 opacity: 0;
-                transform: translateX(-5%);
-                filter: brightness(0.8) contrast(1.2);
             }
-            20% {
-                opacity: 0.2;
-                transform: translateX(-4%);
-                filter: brightness(0.85) contrast(1.15);
-            }
-            40% {
-                opacity: 0.4;
-                transform: translateX(-3%);
-                filter: brightness(0.9) contrast(1.1);
-            }
-            60% {
-                opacity: 0.6;
-                transform: translateX(-2%);
-                filter: brightness(0.95) contrast(1.05);
-            }
-            80% {
-                opacity: 0.8;
-                transform: translateX(-1%);
-                filter: brightness(0.98) contrast(1.02);
-            }
-            100% {
+            to {
                 opacity: 1;
-                transform: translateX(0);
-                filter: brightness(1) contrast(1);
             }
         }
 
